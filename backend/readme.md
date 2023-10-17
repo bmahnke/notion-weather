@@ -1,0 +1,5 @@
+### PSQL
+
+```
+psql -U postgres
+```
