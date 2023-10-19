@@ -1,3 +1,9 @@
+# Tailwind
+
+```sh
+npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles//output.css --watch
+```
+
 # Astro Starter Kit: Basics
 
 ```sh
