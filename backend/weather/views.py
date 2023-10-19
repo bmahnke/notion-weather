@@ -33,7 +33,7 @@ class WeatherViewSet(viewsets.ViewSet):
             "timesteps": request.GET.get('timesteps', 'daily')
         }
 
-        headers = {"accept": "application/json"}
+        headers = {"content-type": "application/json"}
 
         response = requests.get(self.base_api_url + "forecast", headers=headers, params=payload)
         print("tomorrow.io response: " + str(response.status_code))
@@ -48,7 +48,7 @@ class WeatherViewSet(viewsets.ViewSet):
             "units": request.GET.get('units', 'imperial'),
         }
 
-        headers = {"accept": "application/json"}
+        headers = {"content-type": "application/json"}
 
         response = requests.get(self.base_api_url + "realtime", headers=headers, params=payload)
         print("tomorrow.io response: " + str(response.status_code))
