@@ -37,6 +37,8 @@ class WeatherViewSet(viewsets.ViewSet):
 
         response = requests.get(self.base_api_url + "forecast", headers=headers, params=payload)
         print("tomorrow.io response: " + str(response.status_code))
+        print("response headers: ")
+        print(response.headers)
 
         return JsonResponse({ "response": response.json() }, status=response.status_code)
 
@@ -52,5 +54,7 @@ class WeatherViewSet(viewsets.ViewSet):
 
         response = requests.get(self.base_api_url + "realtime", headers=headers, params=payload)
         print("tomorrow.io response: " + str(response.status_code))
-
+        print("response headers: ")
+        print(response.headers)
+        
         return JsonResponse({ "response": response.json() }, status=response.status_code)        
