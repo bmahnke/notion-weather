@@ -1,15 +1,15 @@
 import requests
 import environ
-
 from typing import Any
-
 from django.shortcuts import render
 from django.http import JsonResponse
 
+from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from .serializers import WeatherSerializer
+from .services import TomorrowIoRequestsBizLogic
 
 class WeatherViewSet(viewsets.ViewSet):
     serializer_class = WeatherSerializer
@@ -25,7 +25,7 @@ class WeatherViewSet(viewsets.ViewSet):
         super().__init__(**kwargs)
 
     @action(detail=False, methods=['GET'], url_path='forecast', url_name='forecast')
-    def forcast(self, request):
+    def forecast(self, request):
         payload = { 
             "apikey": self.api_key,
             "location": request.GET.get('location', 'new york'),
@@ -33,13 +33,14 @@ class WeatherViewSet(viewsets.ViewSet):
             "timesteps": request.GET.get('timesteps', 'daily')
         }
 
+        cached = TomorrowIoRequestsBizLogic.get_cached_result(payload)
+        if cached.exists():
+            return JsonResponse({ "response": cached[0].returnData, "cached": True}, status=status.HTTP_200_OK)
+
         headers = {"content-type": "application/json"}
-
         response = requests.get(self.base_api_url + "forecast", headers=headers, params=payload)
-        print("tomorrow.io response: " + str(response.status_code))
-        print("response headers: ")
-        print(response.headers)
 
+        TomorrowIoRequestsBizLogic.log_request(payload, response)
         return JsonResponse({ "response": response.json() }, status=response.status_code)
 
     @action(detail=False, methods=['GET'], url_path='realtime', url_name='realtime')
@@ -50,11 +51,12 @@ class WeatherViewSet(viewsets.ViewSet):
             "units": request.GET.get('units', 'imperial'),
         }
 
-        headers = {"content-type": "application/json"}
+        cached = TomorrowIoRequestsBizLogic.get_cached_result(payload)
+        if cached.exists():
+            return JsonResponse({ "response": cached[0].returnData, "cached": True}, status=status.HTTP_200_OK)
 
+        headers = {"content-type": "application/json"}
         response = requests.get(self.base_api_url + "realtime", headers=headers, params=payload)
-        print("tomorrow.io response: " + str(response.status_code))
-        print("response headers: ")
-        print(response.headers)
         
-        return JsonResponse({ "response": response.json() }, status=response.status_code)        
+        TomorrowIoRequestsBizLogic.log_request(payload, response)
+        return JsonResponse({ "response": response.json() }, status=response.status_code)
