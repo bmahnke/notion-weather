@@ -26,9 +26,18 @@ class WeatherViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['GET'], url_path='forecast', url_name='forecast')
     def forecast(self, request):
+        loc = str(request.GET.get('location', 'new york'))
+
+        is_lat_long = TomorrowIoRequestsBizLogic.location_str_is_lat_long(loc)
+
+        # if location has a comma and is not numeric (i.e. "evans, ga" vs "32.33, -82.332")
+        # take the front of the split and use that
+        if not is_lat_long:
+            loc = loc.split(',')[0]          
+
         payload = { 
             "apikey": self.api_key,
-            "location": request.GET.get('location', 'new york'),
+            "location": loc,
             "units": request.GET.get('units', 'imperial'),
             "timesteps": request.GET.get('timesteps', 'daily')
         }
@@ -45,9 +54,18 @@ class WeatherViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['GET'], url_path='realtime', url_name='realtime')
     def realtime(self, request):
+        loc = str(request.GET.get('location', 'new york'))
+
+        is_lat_long = TomorrowIoRequestsBizLogic.location_str_is_lat_long(loc)
+
+        # if location has a comma and is not numeric (i.e. "evans, ga" vs "32.33, -82.332")
+        # take the front of the split and use that
+        if not is_lat_long:
+            loc = loc.split(',')[0]
+
         payload = { 
             "apikey": self.api_key,
-            "location": request.GET.get('location', 'new york'),
+            "location": loc,
             "units": request.GET.get('units', 'imperial'),
         }
 
