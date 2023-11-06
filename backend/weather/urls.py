@@ -6,7 +6,7 @@ from . import views
 router = routers.DefaultRouter()
  
 # register the router
-router.register(r'weather', views.WeatherViewSet, 'weather')
+router.register(r'weather', views.weather.WeatherViewSet, 'weather')
 
 urlpatterns = [
     path('', include(router.urls))

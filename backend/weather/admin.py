@@ -4,8 +4,6 @@ from django.contrib import admin
 from .models import TomorrowIoRequest
 
 class TomorrowIoRequestAdmin(admin.ModelAdmin):
-    list_display = ("locationName", "locationType", "requestedAt", "location")
-
-
+    list_display = ("locationName", "locationType", "timesteps", "locationQuery", "units", "requestedAt", "location")
 
 admin.site.register(TomorrowIoRequest, TomorrowIoRequestAdmin)
