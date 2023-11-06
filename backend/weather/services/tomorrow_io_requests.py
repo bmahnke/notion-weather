@@ -1,11 +1,10 @@
-import urllib.parse
 import requests
+import pdb
+
 from datetime import datetime, timedelta, timezone
 from django.contrib.gis.geos import Point
-from weather import models
 from typing import List
-
-import pdb
+from weather import models
 
 class TomorrowIoRequestsBizLogic():
     @staticmethod
@@ -20,10 +19,13 @@ class TomorrowIoRequestsBizLogic():
 
     @staticmethod
     def location_str_is_lat_long(location_str: str):
-        # if location has a comma and is not numeric (i.e. "evans, ga" vs "32.33, -82.332")
-        # take the front of the split and use that
+        # if we don't have a comma in the location string, we're not a
+        # a valid lat/long combination, so return false
         if location_str.find(',') > 0:
             try:
+                # if we can parse the left and right as floats,
+                # then we should be a lat/long combo.
+
                 left, right = location_str.split(',')
                 float(left)
                 float(right[1:None])
@@ -35,8 +37,6 @@ class TomorrowIoRequestsBizLogic():
 
     @staticmethod
     def log_request(params: dict, response: requests.Response) -> models.TomorrowIoRequest:
-        p = { k : params[k] for k in params.keys() - ["apikey"] }
-
         location = None
         locationName = None
         locationType = None
@@ -49,9 +49,9 @@ class TomorrowIoRequestsBizLogic():
 
         return models.TomorrowIoRequest.objects.create(
             requestedAt=datetime.now(timezone.utc),
-            units=p.get("units", None),
-            locationQuery=p.get("location", None),
-            timesteps=p.get("timesteps", None),
+            units=params.get("units", None),
+            locationQuery=params.get("location", None),
+            timesteps=params.get("timesteps", None),
             returnData=json_data,
             location=location,
             locationName=locationName,
