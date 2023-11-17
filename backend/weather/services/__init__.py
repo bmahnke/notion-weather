@@ -1,1 +1,2 @@
 from .tomorrow_io_requests import TomorrowIoRequestsBizLogic
+from .google_cloud import GoogleCloud
