@@ -11,9 +11,19 @@ class TomorrowIoRequestsBizLogic():
     def get_cached_result(params: dict) -> List[models.TomorrowIoRequest]: 
         one_day = datetime.now(timezone.utc) - timedelta(days=1)
         return models.TomorrowIoRequest.objects.filter(
-            requestedAt__gte=one_day, 
+            requested_at__gte=one_day, 
             units=params.get("units"), 
-            locationQuery=params.get("location"), 
+            location_query=params.get("location"), 
+            timesteps=params.get("timesteps")
+        )
+
+    @staticmethod
+    def check_cached_requests(gmr: models.GoogleMapApiRequest, params: dict) -> List[models.TomorrowIoRequest]:
+        one_day = datetime.now(timezone.utc) - timedelta(days=1)
+        return models.TomorrowIoRequest.objects.filter(
+            requested_at__gte=one_day, 
+            units=params.get("units"), 
+            google_map_request_id=gmr.id,
             timesteps=params.get("timesteps")
         )
 
@@ -36,24 +46,18 @@ class TomorrowIoRequestsBizLogic():
             return False
 
     @staticmethod
-    def log_request(params: dict, response: requests.Response) -> models.TomorrowIoRequest:
-        location = None
-        locationName = None
-        locationType = None
-
+    def log_request(params: dict, response: requests.Response, google_map_request: models.GoogleMapApiRequest) -> models.TomorrowIoRequest:
+        # only log successful responses.
+        if response.status_code != requests.codes.ok:
+            return None
+        
         json_data = response.json()
-        if response.status_code > 199 and response.status_code < 300:
-            locationName = json_data.get('location').get('name', None)
-            locationType = json_data.get('location').get('type', None)
-            location = Point(json_data["location"]["lon"], json_data["location"]["lat"])
 
         return models.TomorrowIoRequest.objects.create(
-            requestedAt=datetime.now(timezone.utc),
+            requested_at=datetime.now(timezone.utc),
             units=params.get("units", None),
-            locationQuery=params.get("location", None),
+            google_map_request=google_map_request,
+            location_query=params.get("location", None),
             timesteps=params.get("timesteps", None),
-            returnData=json_data,
-            location=location,
-            locationName=locationName,
-            locationType=locationType)
+            return_data=json_data)
             
