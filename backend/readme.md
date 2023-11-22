@@ -64,3 +64,11 @@ if os.name == 'nt':
 
 
 Add the above code in your settings.py. Then, run `python manage.py check` if you got the error still, please go to C:\OSGeo4W64 or C:\OSGeo4W. There you can find gdalxxx.dll. please rename the file name to 'gdal202' or 'gdal203' in error message. Please run `python manage.py check`.
+
+# Research
+
+```text
+https://registry.opendata.aws/collab/noaa/
+```
+
+Need to research and see if this is a better option than tomorrow.io for weather and other information that I want to include in the future.
