@@ -31,6 +31,18 @@ $ brew install libgeoip
 ```
 
 #### windows
+
+Make sure to install Postgres
+```sh
+pip install pysopg2
+```
+
+GIS Install
+```sh
+https://trac.osgeo.org/osgeo4w/
+```
+
+Follow steps here to setup some registry keys
 ```
 https://docs.djangoproject.com/en/4.2/ref/contrib/gis/install/#windows
 ```
@@ -61,9 +73,13 @@ if os.name == 'nt':
     os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
     os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 ```
+Possible to need to change, or add the line item here... check 
 
+```sh
+C:\Dev\src\notion-weather\env\Lib\site-packages\django\contrib\gis\gdal\libgdal.py
+```
 
-Add the above code in your settings.py. Then, run `python manage.py check` if you got the error still, please go to C:\OSGeo4W64 or C:\OSGeo4W. There you can find gdalxxx.dll. please rename the file name to 'gdal202' or 'gdal203' in error message. Please run `python manage.py check`.
+Add the above code in your settings.py. Then, run `python manage.py check` if you got the error still, please go to C:\OSGeo4W64 or C:\OSGeo4W (C:\OSGeo4W\bin). There you can find gdalxxx.dll. please rename the file name to 'gdal202' or 'gdal203' in error message. Please run `python manage.py check`.
 
 # Research
 
