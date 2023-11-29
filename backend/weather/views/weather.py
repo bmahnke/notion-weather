@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from ..serializers import WeatherSerializer
-from ..services import TomorrowIoRequestsBizLogic, GoogleCloud
+from ..services import TomorrowIoRequests, GoogleCloud
 
 class WeatherViewSet(viewsets.ViewSet):
     serializer_class = WeatherSerializer
@@ -33,7 +33,7 @@ class WeatherViewSet(viewsets.ViewSet):
         if not place_id and not lat_long:
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply place id or lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not place_id and not TomorrowIoRequestsBizLogic.location_str_is_lat_long(lat_long):
+        if not place_id and not TomorrowIoRequests.location_str_is_lat_long(lat_long):
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply valid lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
 
         # FLOW:
@@ -66,7 +66,7 @@ class WeatherViewSet(viewsets.ViewSet):
             "units": request.GET.get('units', 'imperial')
         }
 
-        previous = TomorrowIoRequestsBizLogic.check_cached_requests(gmr, payload)
+        previous = TomorrowIoRequests.check_cached_requests(gmr, payload)
         if previous.exists():
             return JsonResponse({ "response": previous[0].return_data, "place_id": gmr.place_id, "cached": True}, status=status.HTTP_200_OK)
 
@@ -74,7 +74,7 @@ class WeatherViewSet(viewsets.ViewSet):
         response = requests.get(self.base_api_url + "realtime", headers=headers, params=payload)
 
         # log the request + response.
-        TomorrowIoRequestsBizLogic.log_request(payload, response, gmr)
+        TomorrowIoRequests.log_request(payload, response, gmr)
 
         # send it back
         return JsonResponse({ "response": response.json(), "place_id": gmr.place_id, "cached": False }, status=response.status_code)
@@ -88,7 +88,7 @@ class WeatherViewSet(viewsets.ViewSet):
         if not place_id and not lat_long:
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply place id or lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not place_id and not TomorrowIoRequestsBizLogic.location_str_is_lat_long(lat_long):
+        if not place_id and not TomorrowIoRequests.location_str_is_lat_long(lat_long):
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply valid lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
 
         # FLOW:
@@ -122,7 +122,7 @@ class WeatherViewSet(viewsets.ViewSet):
             "timesteps": request.GET.get('timesteps', 'daily')
         }
 
-        previous = TomorrowIoRequestsBizLogic.check_cached_requests(gmr, payload)
+        previous = TomorrowIoRequests.check_cached_requests(gmr, payload)
         if previous.exists():
             return JsonResponse({ "response": previous[0].return_data, "place_id": gmr.place_id, "cached": True}, status=status.HTTP_200_OK)
 
@@ -130,7 +130,7 @@ class WeatherViewSet(viewsets.ViewSet):
         response = requests.get(self.base_api_url + "forecast", headers=headers, params=payload)
 
         # log the request + response.
-        TomorrowIoRequestsBizLogic.log_request(payload, response, gmr)
+        TomorrowIoRequests.log_request(payload, response, gmr)
 
         # send it back
         return JsonResponse({ "response": response.json(), "place_id": gmr.place_id, "cached": False }, status=response.status_code)

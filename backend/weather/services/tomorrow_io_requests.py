@@ -6,7 +6,7 @@ from django.contrib.gis.geos import Point
 from typing import List
 from weather import models
 
-class TomorrowIoRequestsBizLogic():
+class TomorrowIoRequests():
     @staticmethod
     def get_cached_result(params: dict) -> List[models.TomorrowIoRequest]: 
         one_day = datetime.now(timezone.utc) - timedelta(days=1)
