@@ -1,21 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-if (Astro.request.method === "GET") {
-	try {
-	  const data = await Astro.request.formData();
-	  const search = data.get("search");
-
-	  console.log("search: ", search);
-
-	  return false;
-	  // Do something with the data
-	} catch (error) {
-	  if (error instanceof Error) {
-		console.error(error.message);
-	  }
-	}
-  }
 
 ---
 
@@ -88,7 +73,7 @@ if (Astro.request.method === "GET") {
 
 		const pre = document.getElementById("pre") as HTMLPreElement;
 		pre.textContent = JSON.stringify(content.response.data.values, undefined, 2)
-		
+
 		return false;
 	}
 
