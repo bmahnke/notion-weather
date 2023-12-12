@@ -1,26 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+if (Astro.request.method === "GET") {
+	try {
+	  const data = await Astro.request.formData();
+	  const search = data.get("search");
+
+	  console.log("search: ", search);
+
+	  return false;
+	  // Do something with the data
+	} catch (error) {
+	  if (error instanceof Error) {
+		console.error(error.message);
+	  }
+	}
+  }
+
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<form id="weather-form" class="grid grid-cols-2 gap-4" onsubmit="onFormSubmit">
-			<div>
-				<label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
-				<div class="mt-2">
-					<input type="email" name="email" id="email" class="block w-full outline-none rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-orange-500 text-sm" placeholder="you@example.com">
+		<form id="weather-form" class="flex justify-between w-full" >
+			<div id="form-wrapper" class="grid grid-cols-2 gap-4">
+				<div>
+					<label for="search" class="block text-sm font-medium leading-6 text-gray-900">Search</label>
+					<div class="mt-2">
+						<input type="search" name="search" id="search" class="block w-full outline-none rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-orange-500 text-sm" placeholder="Augusta, GA">
+					</div>
 				</div>
+
+				<div>
+					<button type="submit" form="weather-form" class="p-2 rounded-md bg-slate-500 text-gray-100">Click</button>
+				</div>
+			</div>
+
+			<div>
+				<output id="output"></output>
+				<pre id="pre"></pre>
+				<!-- TODO: units changer. -->
 			</div>
 		</form>
 	</main>
 </Layout>
 
 <script>
-	function onFormSubmit() {
-
-	}
 	const requests = Object.assign({})
+
+	async function onFormSubmit(event: SubmitEvent) {
+		event.preventDefault();
+
+		const targetForm = event.target as HTMLFormElement;
+		const formData = new FormData(targetForm)
+
+		const output = document.getElementById("output") as HTMLOutputElement;
+		output.textContent = "";
+
+		for (const [key, value] of formData) {
+			output.textContent += `${key}: ${value}\n`;
+		}
+
+
+		let location = formData.get('search')
+
+		// let location = "test";
+		// console.log(event.target);
+		// console.log(typeof(event.target));
+
+
+		// const recentQuery = requests[location]
+		// if (recentQuery) {
+		// 	location = requests[location] as string
+		// }
+
+		const places = await fetch("http://127.0.0.1:8000/api/places/autocomplete/?place_query=" + location, {
+			method: "GET"
+		}).then((response) => response.json())
+
+
+		const place_id = places.detail[0].place_id
+		const content = await fetch("http://127.0.0.1:8000/api/weather/realtime?place_id=" + place_id, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}).then((response) => response.json());
+
+		const pre = document.getElementById("pre") as HTMLPreElement;
+		pre.textContent = JSON.stringify(content.response.data.values, undefined, 2)
+		
+		return false;
+	}
+
+	const form = document.getElementById("weather-form")
+	form?.addEventListener('submit', onFormSubmit);
 
 	function updateUI(response: any) {
 		if (response.cached) {
