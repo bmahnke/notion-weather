@@ -4,35 +4,52 @@ import React, { useRef, useEffect, useState } from 'react'
 import { type GooglePlace } from '../../types/googlePlace';
 import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
+import { Autocomplete } from './ui/autocomplete';
 
 export function SearchForm() {
     const pre = useRef(null);
     const output = useRef(null);
 
+	const [placeId, setPlaceId] = useState<any>(undefined)
+	const [query, setQuery] = useState<string | undefined>("")
+	const [options, setOptions] = useState<GooglePlace[]>([])
 
-    async function handleSubmit(event : React.FormEvent<HTMLFormElement>) {
-		const targetForm = event.currentTarget;
-		const formData = new FormData(targetForm);
+	useEffect(() => {
+		if (query && query.length > 3) {
+			queryPlaces()
+		} else{
+			setOptions([])
+		}			
+	}, [query])
 
-		// const output = document.getElementById("output");
-		//@ts-ignore
-		output.current.textContent = "";
-
-		for (const [key, value] of formData) {
-			//@ts-ignore
-			output.current.textContent += `${key}: ${value}\n`;
-		}
-
+	async function queryPlaces() {
 		let url = new URL("http://127.0.0.1:8000/api/places/autocomplete/");
-		url.searchParams.set("place_query", (formData.get('search') || "").toString());
+
+		//@ts-ignore
+		url.searchParams.set("place_query", query?.toString());
 
 		const places = await weatherFetch<ApiResponse<GooglePlace>>(url.toString(), {
 			method: "GET"
 		});
 
+		setOptions(places.detail)
+	}
+
+    async function handleSubmit(event : React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		await queryPlaces()
+    }
+
+	async function onSelect(option: GooglePlace) {
+		setQuery(option.description)
+
+		// const output = document.getElementById("output");
 		//@ts-ignore
-		const place_id = places.detail[0].place_id
-		const content = await fetch("http://127.0.0.1:8000/api/weather/realtime?place_id=" + place_id, {
+		output.current.textContent = "";
+		//@ts-ignore
+		output.current.textContent += `query: ${query}\n`;
+
+		const content = await fetch("http://127.0.0.1:8000/api/weather/realtime?place_id=" + option.place_id, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
@@ -42,8 +59,7 @@ export function SearchForm() {
 		// this.pre = document.getElementById("pre")
 		//@ts-ignore
 		pre.current.textContent = JSON.stringify(content.response.data.values, undefined, 2)
-
-    }
+	}
 
     return (
 		<form id="weather-form" onSubmit={(e) => handleSubmit(e)} className="flex justify-between w-full" >
@@ -51,11 +67,31 @@ export function SearchForm() {
 				<div>
 					<label htmlFor="search" className="block text-sm font-medium leading-6 text-gray-900">Search</label>
 					<div className="mt-2">
-						<input type="search" 
-                            name="search" 
-                            id="search" 
-                            className="block w-full outline-none rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-orange-500 text-sm"
-                            placeholder="Augusta, GA" />
+						<input 
+							type="search"
+							id="search"
+							value={query}
+							name="search"
+							onChange={(e) => setQuery(e.target.value)}
+							className="block w-full outline-none rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-orange-500 text-sm"
+							placeholder='Augusta, GA'
+						/>
+						{options.length > 1 && 
+							<ul className=" bg-white -mt-1">
+							{
+								options.map((option: GooglePlace, index: number) => {
+									return (
+										<li className={index % 2 == 0 ? "cursor-pointer px-2 py-0.5 bg-gray-100 hover:bg-gray-200" : "cursor-pointer px-2 py-0.5 hover:bg-gray-200"}
+											key={option.place_id} 
+											onClick={() => onSelect(option)}
+										>
+											{option.description}
+										</li>
+									)
+								})
+							}
+							</ul>
+						}
 					</div>
 				</div>
 
