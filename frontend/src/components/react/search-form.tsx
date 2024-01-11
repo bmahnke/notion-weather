@@ -1,18 +1,15 @@
-
-
 import React, { useRef, useEffect, useState } from 'react'
 import { type GooglePlace } from '../../types/googlePlace';
 import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
-import { Autocomplete } from './ui/autocomplete';
 
 export function SearchForm() {
     const pre = useRef(null);
     const output = useRef(null);
 
-	const [placeId, setPlaceId] = useState<any>(undefined)
 	const [query, setQuery] = useState<string | undefined>("")
 	const [options, setOptions] = useState<GooglePlace[]>([])
+	const [selectedOption, setSelectedOption] = useState<GooglePlace | undefined>(undefined)
 
 	useEffect(() => {
 		if (query && query.length > 3) {
@@ -21,6 +18,13 @@ export function SearchForm() {
 			setOptions([])
 		}			
 	}, [query])
+
+	useEffect(() => {
+		//@ts-ignore
+		output.current.textContent = "";
+		//@ts-ignore
+		output.current.textContent += `query: ${query}\n`;
+	}, [selectedOption])
 
 	async function queryPlaces() {
 		let url = new URL("http://127.0.0.1:8000/api/places/autocomplete/");
@@ -42,12 +46,7 @@ export function SearchForm() {
 
 	async function onSelect(option: GooglePlace) {
 		setQuery(option.description)
-
-		// const output = document.getElementById("output");
-		//@ts-ignore
-		output.current.textContent = "";
-		//@ts-ignore
-		output.current.textContent += `query: ${query}\n`;
+		setSelectedOption(option)
 
 		const content = await fetch("http://127.0.0.1:8000/api/weather/realtime?place_id=" + option.place_id, {
 			method: "GET",
@@ -56,7 +55,6 @@ export function SearchForm() {
 			}
 		}).then((response) => response.json());
 
-		// this.pre = document.getElementById("pre")
 		//@ts-ignore
 		pre.current.textContent = JSON.stringify(content.response.data.values, undefined, 2)
 	}
