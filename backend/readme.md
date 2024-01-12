@@ -34,7 +34,7 @@ $ brew install libgeoip
 
 Make sure to install Postgres
 ```sh
-pip install pysopg2
+pip install psycopg2
 ```
 
 GIS Install
