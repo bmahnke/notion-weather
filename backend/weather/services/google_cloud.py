@@ -53,8 +53,6 @@ class GoogleCloud():
             return existing[0]
         
         result = self._gmaps.geocode(latLongOrPlaceId)
-
-        breakpoint()
         result = result[0]
 
         model = self._log_geocode_google_api_model(result)

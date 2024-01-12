@@ -1,4 +1,4 @@
-type GooglePlace = {
+export type GooglePlace = {
     description: string,
     matched_substrings: [{
         "length": number,
@@ -22,7 +22,5 @@ type GooglePlace = {
         "offset": number,
         "value": string
     }],
-    types: string[]    
+    types: string[]
 };
-
-export type { GooglePlace };

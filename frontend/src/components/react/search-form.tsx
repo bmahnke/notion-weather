@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { type GooglePlace } from '../../types/googlePlace';
+import { type GooglePlace } from '../../types/google_place';
+import { type GoogleReverseGeocode } from '../../types/google_reverse_geocode';
 import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
 
@@ -50,6 +51,46 @@ export function SearchForm(props: SearchFormProps) {
 		await queryPlaces()
     }
 
+	function handleGetCurrentLocation(event : React.MouseEvent<HTMLButtonElement>) {
+		var geoOptions = {
+			timeout: 10 * 1000,
+		};
+
+		var geoSuccess = async function (position: GeolocationPosition) {
+			const lat = position.coords.latitude;
+			const long = position.coords.longitude;
+			let location = `${lat}, ${long}`;
+
+			let url = new URL("http://127.0.0.1:8000/api/places/reverse-geocode");
+			url.searchParams.set("place_id", location)
+			
+			const reverseGeocode = await weatherFetch<GoogleReverseGeocode>(url.toString(), {
+				method: "GET"
+			});
+
+			const googlePlaceOpt = {
+				place_id: reverseGeocode.detail.place_id,
+				description: reverseGeocode.detail.formatted_address,
+				types: reverseGeocode.detail.types
+			} as GooglePlace
+			
+			// this isn't quite working... there are still options that appear
+			setQuery(() => googlePlaceOpt.description)
+			setOptions(() => [])
+			setSelectedOption(() => googlePlaceOpt)
+		};
+		var geoError = function (error: any) {
+			console.log('Error occurred. Error code: ' + error.code);
+			// error.code can be:
+			//   0: unknown error
+			//   1: permission denied
+			//   2: position unavailable (error response from location provider)
+			//   3: timed out
+		};
+
+		navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);				
+	}
+
 	async function onSelect(option: GooglePlace) {
 		setQuery(option.description)
 		setSelectedOption(option)
@@ -99,7 +140,15 @@ export function SearchForm(props: SearchFormProps) {
 					</div>
 				</div>
 
-				<div>
+				<div className="flex space-x-4 items-center">
+					<button type="button" onClick={handleGetCurrentLocation} className="hover:text-orange-500" aria-label="Use Current Location">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+							<path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+						</svg>						
+					</button>
+					
+
 					<button type="submit" form="weather-form" className="p-2 rounded-md bg-slate-500 text-gray-100">Click</button>
 				</div>
 			</div>

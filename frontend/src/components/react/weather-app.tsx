@@ -1,11 +1,11 @@
 import SearchForm from "./search-form";
-import { type GooglePlace } from "../../types/googlePlace";
 import { useEffect, useState } from "react";
-import { type TomorrowIoForecast } from "../../types/tomorrow_io_forecast";
-
-import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
 import { getWeatherCodeInformation } from "../../types/weather_code";
+
+import { type GooglePlace } from "../../types/google_place";
+import { type TomorrowIoForecast } from "../../types/tomorrow_io_forecast";
+import { type ApiResponse } from '../../types/api_response';
 
 export function WeatherApp() {
     const [googlePlace, setGooglePlace] = useState<GooglePlace | undefined>(undefined)

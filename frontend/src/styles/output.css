@@ -767,8 +767,16 @@ select {
   display: none;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .w-full {
   width: 100%;
+}
+
+.w-6 {
+  width: 1.5rem;
 }
 
 .cursor-pointer {
@@ -943,6 +951,11 @@ body {
 .hover\:bg-gray-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+.hover\:text-orange-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(249 115 22 / var(--tw-text-opacity));
 }
 
 .focus\:ring-orange-500:focus {
