@@ -5,6 +5,7 @@ import { type TomorrowIoForecast } from "../../types/tomorrow_io_forecast";
 
 import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
+import { getWeatherCodeInformation } from "../../types/weather_code";
 
 export function WeatherApp() {
     const [googlePlace, setGooglePlace] = useState<GooglePlace | undefined>(undefined)
@@ -30,6 +31,12 @@ export function WeatherApp() {
 
             promise.then(e => {
                 //@ts-ignore
+                (e as TomorrowIoForecast).response.timelines.daily.forEach(day => {
+                    console.debug("setting weather code information for day: ", day.time)
+                    day.values.weatherCodeInfo = getWeatherCodeInformation(day.values.weatherCodeMin)
+                })
+
+                //@ts-ignore
                 setForecast(e)
             })
         }
@@ -54,12 +61,18 @@ export function WeatherApp() {
 
             { forecast &&
                 <div className="flex flex-col">
-                    {forecast.response.timelines.daily.map(day => {
+                    {forecast.response.timelines.daily.map((day, index) => {
                         return (
-                            <div className="flex flex-col space-y-2">
+                            <div key={index} className="flex flex-col space-y-2">
                                 <span>{day.time}</span>
                                 <span>min: {day.values.temperatureApparentMin}</span>
                                 <span>max: {day.values.temperatureApparentMax}</span>
+
+                                {day.values.weatherCodeInfo && 
+                                    (
+                                        <span>Day description: {day.values.weatherCodeInfo.description}</span>
+                                    )
+                                }
                             </div>
                         )
                     })}

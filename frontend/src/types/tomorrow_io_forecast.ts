@@ -1,6 +1,9 @@
+import type { WeatherCodeInformation } from "./weather_code";
+
 type DailyMapping = {
     time: string,
     values: {
+        weatherCodeInfo: WeatherCodeInformation,
         sunsetTime : string
         uvIndexAvg : number,
         uvIndexMax : number,

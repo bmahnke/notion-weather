@@ -62,6 +62,7 @@ const DescriptionMap: CodeMapping = {
     8000: "Thunderstorm"
 }
 
+export type { WeatherCodeInformation };
 export function getWeatherCodeInformation(code: number): WeatherCodeInformation {
     return {
         code: code,
