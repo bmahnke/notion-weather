@@ -3,7 +3,11 @@ import { type GooglePlace } from '../../types/googlePlace';
 import { type ApiResponse } from '../../types/api_response';
 import { weatherFetch } from '../../helpers/api';
 
-export function SearchForm() {
+interface SearchFormProps {
+	onPlaceSelect: (selected: GooglePlace | undefined) => void
+}
+
+export function SearchForm(props: SearchFormProps) {
     const pre = useRef(null);
     const output = useRef(null);
 
@@ -20,10 +24,12 @@ export function SearchForm() {
 	}, [query])
 
 	useEffect(() => {
-		//@ts-ignore
+		// @ts-ignore
 		output.current.textContent = "";
 		//@ts-ignore
 		output.current.textContent += `query: ${query}\n`;
+
+		props.onPlaceSelect(selectedOption)
 	}, [selectedOption])
 
 	async function queryPlaces() {
