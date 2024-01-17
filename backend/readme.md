@@ -1,3 +1,15 @@
+### venv
+
+#### Linux
+```sh
+source env/bin/activate
+```
+
+#### Windows
+```sh
+env\scripts\activate
+```
+
 ### PSQL
 
 ```

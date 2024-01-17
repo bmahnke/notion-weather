@@ -120,4 +120,4 @@ type TomorrowIoForecast = {
     cached: boolean
 }
 
-export type { TomorrowIoForecast };
+export type { TomorrowIoForecast, DailyMapping };
