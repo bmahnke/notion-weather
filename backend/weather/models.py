@@ -33,7 +33,7 @@ class Address(models.Model):
 
 class GoogleMapApiRequest(models.Model):
     created_at = models.DateTimeField(default=datetime.utcnow)
-    place_id = models.CharField(max_length=100)
+    place_id = models.CharField(max_length=150)
     address = models.ForeignKey("Address", on_delete=models.RESTRICT)
     location_type = models.CharField(max_length=100, null=True)
     types = ArrayField(models.CharField(max_length=100), blank=True, null=True)
