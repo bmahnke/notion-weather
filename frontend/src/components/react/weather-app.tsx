@@ -6,7 +6,7 @@ import { getWeatherCodeInformation } from "../../types/weather_code";
 import { type GooglePlace } from "../../types/google_place";
 import { type TomorrowIoForecast } from "../../types/tomorrow_io_forecast";
 import { type ApiResponse } from '../../types/api_response';
-import { DayWeather } from "./day-weather";
+import { Forecast } from "./forecast";
 
 export function WeatherApp() {
     const [googlePlace, setGooglePlace] = useState<GooglePlace | undefined>(undefined)
@@ -61,16 +61,9 @@ export function WeatherApp() {
             }
 
             { forecast &&
-                <div className="flex flex-col">
-                    {forecast.response.timelines.daily.map((day, index) => {
-                        return (
-                            <DayWeather
-                                key={index}
-                                day={day}
-                            />
-                        )
-                    })}
-                </div>
+                <Forecast
+                    days={forecast.response.timelines.daily}
+                />
             }
         </div>
     )
