@@ -29,6 +29,7 @@ class WeatherViewSet(viewsets.ViewSet):
     def realtime(self, request):
         place_id = str(request.GET.get('place_id', None))
         lat_long = str(request.GET.get('lat_long', None))
+        useCache = not bool(request.GET.get('force', False))
 
         if not place_id and not lat_long:
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply place id or lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
@@ -67,7 +68,7 @@ class WeatherViewSet(viewsets.ViewSet):
         }
 
         previous = TomorrowIoRequests.check_cached_requests(gmr, payload)
-        if previous.exists():
+        if useCache and previous.exists():
             return JsonResponse({ "response": previous[0].return_data, "place_id": gmr.place_id, "cached": True}, status=status.HTTP_200_OK)
 
         headers = {"content-type": "application/json"}
@@ -84,6 +85,7 @@ class WeatherViewSet(viewsets.ViewSet):
     def forecast(self, request):
         place_id = str(request.GET.get('place_id', None))
         lat_long = str(request.GET.get('lat_long', None))
+        useCache = not bool(request.GET.get('force', False))
 
         if not place_id and not lat_long:
             return JsonResponse({"response": {}, "message": "ERROR - Bad Request. Must supply place id or lat long comobo."}, status=status.HTTP_400_BAD_REQUEST)
@@ -123,7 +125,7 @@ class WeatherViewSet(viewsets.ViewSet):
         }
 
         previous = TomorrowIoRequests.check_cached_requests(gmr, payload)
-        if previous.exists():
+        if useCache and previous.exists():
             return JsonResponse({ "response": previous[0].return_data, "place_id": gmr.place_id, "cached": True}, status=status.HTTP_200_OK)
 
         headers = {"content-type": "application/json"}
