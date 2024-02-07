@@ -106,10 +106,37 @@ type DailyMapping = {
     }
 }
 
+type RealTimeMapping = {
+    time: string,
+    values: {
+        weatherCodeInfo: WeatherCodeInformation,
+        uvIndex: number,
+        dewPoint: number,
+        humidity: number,
+        windGust: number,
+        cloudBase: number | string,
+        windSpeed: number,
+        cloudCover: number,
+        visibility: number,
+        temperature: number,
+        weatherCode: number,
+        cloudCeiling: number | string,
+        rainIntensity: number,
+        snowIntensity: number,
+        windDirection: number,
+        sleetIntensity: number,
+        uvHealthConcern: number,
+        temperatureApparent: number,
+        pressureSurfaceLevel: number,
+        freezingRainIntensity: number,
+        precipitationProbability: number
+    }
+}
+
 type HourlyMapping  = {
     time: string,
-    valus: {
-        eatherCodeInfo: WeatherCodeInformation,
+    values: {
+        weatherCodeInfo: WeatherCodeInformation,
         cloudBase: number,
         cloudCeiling: number,
         cloudCover: number,
@@ -148,14 +175,15 @@ type TomorrowIoForecast = {
         location: {
             lat: number,
             long: number
-        }
+        },
         timelines: {
             daily: DailyMapping[],
             hourly: HourlyMapping[],
-        }
+        },
+        data: RealTimeMapping
     },
     place_id: string,
     cached: boolean
 }
 
-export type { TomorrowIoForecast, DailyMapping, HourlyMapping };
+export type { TomorrowIoForecast, DailyMapping, HourlyMapping, RealTimeMapping };
