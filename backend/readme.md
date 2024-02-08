@@ -95,8 +95,15 @@ Add the above code in your settings.py. Then, run `python manage.py check` if yo
 
 # Research
 
-```text
-https://registry.opendata.aws/collab/noaa/
-```
+### Weathere API
+
+- [US National Oceanic and Atmospheric Administration](https://registry.opendata.aws/collab/noaa/)
 
 Need to research and see if this is a better option than tomorrow.io for weather and other information that I want to include in the future.
+
+### Teleemetry
+
+1. [Django + OpenTelemtry Guide 1](https://uptrace.dev/get/instrument/opentelemetry-django.html)
+2. [Django + OT guide 2](https://medium.com/telemetryhub-dev/monitoring-django-and-celery-with-opentelemetry-8282be9a8e5a)
+3. [Open Telemtry python docs](https://opentelemetry-python-contrib.readthedocs.io/en/latest/instrumentation/django/django.html)
+4. [More OT python docs](https://opentelemetry-python.readthedocs.io/en/stable/examples/django/README.html)

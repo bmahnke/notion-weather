@@ -13,8 +13,8 @@ export function ExtendedForecast(props: ExtendedForecastProps) {
             {props.days.map((day, index) => {
                 return (
                     <div key={index} className="flex flex-row items-center space-x-2">
-                        <IconComponent icon={day.values.weatherCodeInfo.icon} alt={day.values.weatherCodeInfo.description} />                                
-                        <span>{getDatePart(day.time, 'short-day')}</span>
+                        <IconComponent className="w-8 h-8" icon={day.values.weatherCodeInfo.icon} alt={day.values.weatherCodeInfo.description} />                                
+                        <span className="text-lg">{getDatePart(day.time, 'short-day')}</span>
                         <span>min: {day.values.temperatureApparentMin}</span>
                         <span>max: {day.values.temperatureApparentMax}</span>
                     </div>

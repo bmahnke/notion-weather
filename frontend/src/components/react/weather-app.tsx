@@ -102,8 +102,8 @@ export function WeatherApp() {
             <div className="flex space-x-2">
                 { realtime &&
                     <>
-                        <IconComponent icon={realtime.response.data.values.weatherCodeInfo.icon} alt={realtime.response.data.values.weatherCodeInfo.description} />
-                        <span>{getDatePart(realtime.response.data.time, 'short-day')}</span>
+                        <IconComponent className="w-8 h-8" icon={realtime.response.data.values.weatherCodeInfo.icon} alt={realtime.response.data.values.weatherCodeInfo.description} />
+                        <span className="text-lg">{getDatePart(realtime.response.data.time, 'short-day')}</span>
                         <span>temp: {realtime.response.data.values.temperature}</span>
                         <span>feels like: {realtime.response.data.values.temperatureApparent}</span>
                     </>

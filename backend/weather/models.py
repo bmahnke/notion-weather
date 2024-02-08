@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Create your models here.
 class TomorrowIoRequest(models.Model):
-    requested_at = models.DateTimeField(null=True)
+    requested_at = models.DateTimeField(auto_now_add=True)
     units = models.CharField(max_length=50)
     location_query = models.CharField(max_length=100)
     timesteps = models.CharField(max_length=100, null=True)
@@ -25,14 +25,14 @@ class Address(models.Model):
     country = models.CharField(max_length=100, null=True)
     postal_code = models.CharField(max_length=10, null=True)
     formatted_address = models.CharField(max_length=400, null=True)
-    created_at = models.DateTimeField(default=datetime.utcnow)
-    updated_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.formatted_address 
 
 class GoogleMapApiRequest(models.Model):
-    created_at = models.DateTimeField(default=datetime.utcnow)
+    created_at = models.DateTimeField(auto_now_add=True)
     place_id = models.CharField(max_length=150)
     address = models.ForeignKey("Address", on_delete=models.RESTRICT)
     location_type = models.CharField(max_length=100, null=True)

@@ -12,6 +12,7 @@ export function IconComponent(props: IconComponentProps) {
             <Suspense fallback={<div>...</div>}>
                 <img 
                     alt={props.alt}
+                    className={props.className}
                     src={`/svg/${props.icon}.svg`}
                 />
             </Suspense>

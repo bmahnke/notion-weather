@@ -13,8 +13,8 @@ export function HourlyForecast(props: HourlyForecastProps) {
             {props.hours.slice(0, 12).map((hour, index) => {
                 return (
                     <div key={index} className="flex flex-row space-x-2">
-                        <IconComponent icon={hour.values.weatherCodeInfo.icon} alt={hour.values.weatherCodeInfo.description} />  
-                        <span>{getTimePart(hour.time, '12-hour')}</span>
+                        <IconComponent className="w-8 h-8" icon={hour.values.weatherCodeInfo.icon} alt={hour.values.weatherCodeInfo.description} />  
+                        <span className="text-lg">{getTimePart(hour.time, '12-hour')}</span>
                         <span>min: {hour.values.temperature}</span>
                 
                         {hour.values.weatherCodeInfo && 

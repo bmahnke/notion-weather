@@ -9,9 +9,9 @@ from weather import models
 class TomorrowIoRequests():
     @staticmethod
     def get_cached_result(params: dict) -> List[models.TomorrowIoRequest]: 
-        one_day = datetime.now(timezone.utc) - timedelta(days=1)
+        cache_dt = datetime.now(timezone.utc) - timedelta(minutes=30)
         return models.TomorrowIoRequest.objects.filter(
-            requested_at__gte=one_day, 
+            requested_at__gte=cache_dt, 
             units=params.get("units"), 
             location_query=params.get("location"), 
             timesteps=params.get("timesteps")
@@ -19,9 +19,9 @@ class TomorrowIoRequests():
 
     @staticmethod
     def check_cached_requests(gmr: models.GoogleMapApiRequest, params: dict) -> List[models.TomorrowIoRequest]:
-        one_day = datetime.now(timezone.utc) - timedelta(days=1)
+        cache_dt = datetime.now(timezone.utc) - timedelta(minutes=30)
         return models.TomorrowIoRequest.objects.filter(
-            requested_at__gte=one_day, 
+            requested_at__gte=cache_dt, 
             units=params.get("units"), 
             google_map_request_id=gmr.id,
             timesteps=params.get("timesteps")
