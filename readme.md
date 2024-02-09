@@ -29,6 +29,7 @@ pipreqs ./ --force
 | map overlay               | show radar? wind speeds, etc.                       |              |
 | Cool place selection      | roating list of cool places that you can select     |              |
 | Widget                    | Add Python widget code with basic info              |              |
+| Telemetry                 | integratee open telemetry                           |              |
 
 
 
