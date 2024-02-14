@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { type GooglePlace } from '../../types/google_place';
 import { type GoogleReverseGeocode } from '../../types/google_reverse_geocode';
 import { type ApiResponse } from '../../types/api_response';
@@ -9,9 +9,6 @@ interface SearchFormProps {
 }
 
 export function SearchForm(props: SearchFormProps) {
-    const pre = useRef(null);
-    const output = useRef(null);
-
 	const [query, setQuery] = useState<string | undefined>("")
 	const [options, setOptions] = useState<GooglePlace[]>([])
 	const [selectedOption, setSelectedOption] = useState<GooglePlace | undefined>(undefined)
@@ -25,19 +22,14 @@ export function SearchForm(props: SearchFormProps) {
 	}, [query])
 
 	useEffect(() => {
-		// @ts-ignore
-		output.current.textContent = "";
-		//@ts-ignore
-		output.current.textContent += `query: ${query}\n`;
-
 		props.onPlaceSelect(selectedOption)
 	}, [selectedOption])
 
 	async function queryPlaces() {
-		let url = new URL("http://127.0.0.1:8000/api/places/autocomplete/");
+		const url = new URL("http://127.0.0.1:8000/api/places/autocomplete/");
 
-		//@ts-ignore
-		url.searchParams.set("place_query", query?.toString());
+		
+		url.searchParams.set("place_query", query || "");
 
 		const places = await weatherFetch<ApiResponse<GooglePlace>>(url.toString(), {
 			method: "GET"
@@ -51,17 +43,17 @@ export function SearchForm(props: SearchFormProps) {
 		await queryPlaces()
     }
 
-	function handleGetCurrentLocation(event : React.MouseEvent<HTMLButtonElement>) {
-		var geoOptions = {
+	function handleGetCurrentLocation() {
+		const geoOptions = {
 			timeout: 10 * 1000,
 		};
 
-		var geoSuccess = async function (position: GeolocationPosition) {
+		const geoSuccess = async function (position: GeolocationPosition) {
 			const lat = position.coords.latitude;
 			const long = position.coords.longitude;
-			let location = `${lat}, ${long}`;
+			const location = `${lat}, ${long}`;
 
-			let url = new URL("http://127.0.0.1:8000/api/places/reverse-geocode");
+			const url = new URL("http://127.0.0.1:8000/api/places/reverse-geocode");
 			url.searchParams.set("place_id", location)
 			
 			const reverseGeocode = await weatherFetch<GoogleReverseGeocode>(url.toString(), {
@@ -79,7 +71,7 @@ export function SearchForm(props: SearchFormProps) {
 			setOptions(() => [])
 			setSelectedOption(() => googlePlaceOpt)
 		};
-		var geoError = function (error: any) {
+		const geoError = function (error: GeolocationPositionError) {
 			console.log('Error occurred. Error code: ' + error.code);
 			// error.code can be:
 			//   0: unknown error
@@ -102,7 +94,7 @@ export function SearchForm(props: SearchFormProps) {
 			}
 		}).then((response) => response.json());
 
-		//@ts-ignore
+		// @ts-expect-error: no error
 		pre.current.textContent = JSON.stringify(content.response.data.values, undefined, 2)
 	}
 
@@ -151,11 +143,6 @@ export function SearchForm(props: SearchFormProps) {
 
 					<button type="submit" form="weather-form" className="p-2 rounded-md bg-slate-500 text-gray-100">Click</button>
 				</div>
-			</div>
-
-			<div>
-				<output id="output" ref={output}></output>
-				<pre id="pre" ref={pre}></pre>
 			</div>
 		</form>
     )

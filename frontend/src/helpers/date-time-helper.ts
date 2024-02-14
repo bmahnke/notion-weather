@@ -5,6 +5,7 @@ export function  getTimePart (dateTime: string, part: string): string | undefine
     switch (part) {
         case '12-hour':
             opts = Object.assign({}, { hour: 'numeric', hour12: true })
+            break;
         default:
             break;
     }
@@ -20,8 +21,10 @@ export function  getDatePart (dateTime: string, part: string): string | undefine
     switch (part) {
         case 'short-day':
             opts = Object.assign({}, { weekday: 'short' })
+            break;
         case 'long-day':
             opts = Object.assign({}, { weekday: 'long' })
+            break;
         default:
             break;
     }

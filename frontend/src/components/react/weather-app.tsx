@@ -24,9 +24,8 @@ export function WeatherApp() {
     useEffect(() => {
         if (googlePlace) {
 
-            let url = new URL("http://127.0.0.1:8000/api/weather/forecast");
+            const url = new URL("http://127.0.0.1:8000/api/weather/forecast");
             
-            //@ts-ignore
             url.searchParams.set("place_id", googlePlace.place_id);
             
             const dailyPromise = weatherFetch<ApiResponse<TomorrowIoForecast>>(url.toString(), {
@@ -36,13 +35,13 @@ export function WeatherApp() {
             })
 
             dailyPromise.then(e => {
-                //@ts-ignore
+                // @ts-expect-error: no error
                 (e as TomorrowIoForecast).response.timelines.daily.forEach(day => {
                     console.debug("setting weather code information for day: ", day.time)
                     day.values.weatherCodeInfo = getWeatherCodeInformation(day.values.weatherCodeMin)
                 })
 
-                //@ts-ignore
+                // @ts-expect-error: no error
                 setForecast(e)
             });
 
@@ -54,17 +53,16 @@ export function WeatherApp() {
             })
 
             hourlyPromise.then(e => {
-                //@ts-ignore
+                // @ts-expect-error: no error
                 (e as TomorrowIoForecast).response.timelines.hourly.forEach(hour => {
                     hour.values.weatherCodeInfo = getWeatherCodeInformation(hour.values.weatherCode)
                 })
 
-                //@ts-ignore
+                // @ts-expect-error: no error
                 setHourly(e)
             })
 
-            let realTimeUrl = new URL("http://127.0.0.1:8000/api/weather/realtime");
-            //@ts-ignore
+            const realTimeUrl = new URL("http://127.0.0.1:8000/api/weather/realtime");
             realTimeUrl.searchParams.set("place_id", googlePlace.place_id);
 
             const realtimePromise = weatherFetch<ApiResponse<TomorrowIoForecast>>(realTimeUrl.toString(), {
@@ -74,10 +72,10 @@ export function WeatherApp() {
             })
 
             realtimePromise.then(e => {
-                //@ts-ignore
+                // @ts-expect-error: no error
                 (e as TomorrowIoForecast).response.data.values.weatherCodeInfo = getWeatherCodeInformation(e.response.data.values.weatherCode)
 
-                //@ts-ignore
+                // @ts-expect-error: no error
                 setRealtime(e)
             })            
         }
