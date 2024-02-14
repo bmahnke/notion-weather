@@ -27,8 +27,6 @@ export function SearchForm(props: SearchFormProps) {
 
 	async function queryPlaces() {
 		const url = new URL("http://127.0.0.1:8000/api/places/autocomplete/");
-
-		
 		url.searchParams.set("place_query", query || "");
 
 		const places = await weatherFetch<ApiResponse<GooglePlace>>(url.toString(), {
@@ -73,11 +71,6 @@ export function SearchForm(props: SearchFormProps) {
 		};
 		const geoError = function (error: GeolocationPositionError) {
 			console.log('Error occurred. Error code: ' + error.code);
-			// error.code can be:
-			//   0: unknown error
-			//   1: permission denied
-			//   2: position unavailable (error response from location provider)
-			//   3: timed out
 		};
 
 		navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);				
@@ -86,16 +79,6 @@ export function SearchForm(props: SearchFormProps) {
 	async function onSelect(option: GooglePlace) {
 		setQuery(option.description)
 		setSelectedOption(option)
-
-		const content = await fetch("http://127.0.0.1:8000/api/weather/realtime?place_id=" + option.place_id, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		}).then((response) => response.json());
-
-		// @ts-expect-error: no error
-		pre.current.textContent = JSON.stringify(content.response.data.values, undefined, 2)
 	}
 
     return (
