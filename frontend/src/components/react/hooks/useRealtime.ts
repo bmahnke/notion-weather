@@ -1,13 +1,24 @@
 import { useEffect, useState } from "react";
 import type { TomorrowIoForecast } from "../../../types/tomorrow_io_forecast";
 import { fetchApiUrl } from "../../../helpers/api";
+import type { HookResponse } from "../../../types/hook_response";
 
-export function useRealtime(googlePlaceId: string) : [TomorrowIoForecast | undefined, boolean] {
+export function useRealtime(googlePlaceId: string) : HookResponse {
     const [realtime, setRealtime] = useState<TomorrowIoForecast | undefined>(undefined)
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [message, setMEssage] = useState("")
+
+    function reset() {
+        setRealtime(undefined)
+        setLoading(true)
+        setError(false)
+        setMEssage("")
+    }
 
     useEffect(() => {
-        setLoading(true)
+        reset()
+
         const realTimeUrl = new URL("http://127.0.0.1:8000/api/weather/realtime");
         realTimeUrl.searchParams.set("place_id", googlePlaceId);
         fetchApiUrl(realTimeUrl.toString(), { method: "GET" })
@@ -15,10 +26,20 @@ export function useRealtime(googlePlaceId: string) : [TomorrowIoForecast | undef
                 console.debug("FFETCH REALTIME", e);
                 if (e) setRealtime(e)
             })
+            .catch((error : Error) => {
+                console.error("ERROR", error);
+                setError(false);
+                setMEssage(error.message)
+            })
             .finally(() => {
                 setLoading(false)
             })
     }, [googlePlaceId]);
 
-    return [realtime, loading];
+    return {
+        loading: loading,
+        error: error,
+        errorMessage: message,
+        result: realtime
+    };
 }

@@ -8,19 +8,22 @@ interface RealTimeForecastProps {
 }
 
 export function RealTimeForecast(props: RealTimeForecastProps) {
-    const [realtime, loading] = useRealtime(props.googlePlace.place_id)
+    const hookResponse = useRealtime(props.googlePlace.place_id)
 
     return (
         <div className="flex flex-row space-x-2 items-center">
-            { loading &&
+            { hookResponse.loading &&
                 <span>LOADING</span>
             }
-            { !loading && realtime &&
+            { !hookResponse.loading && hookResponse.error &&
+                <span>ERROR: {hookResponse.errorMessage}</span>
+            }
+            { !hookResponse.loading && hookResponse.result &&
                 <>
-                    <IconComponent className="w-8 h-8" icon={realtime.response.data.values.weatherCodeInfo.icon} alt={realtime.response.data.values.weatherCodeInfo.description} />
-                    <span className="text-lg">{getDatePart(realtime.response.data.time, 'short-day')}</span>
-                    <span>temp: {realtime.response.data.values.temperature}</span>
-                    <span>feels like: {realtime.response.data.values.temperatureApparent}</span>
+                    <IconComponent className="w-8 h-8" icon={hookResponse.result.response.data.values.weatherCodeInfo.icon} alt={hookResponse.result.response.data.values.weatherCodeInfo.description} />
+                    <span className="text-lg">{getDatePart(hookResponse.result.response.data.time, 'short-day')}</span>
+                    <span>temp: {hookResponse.result.response.data.values.temperature}</span>
+                    <span>feels like: {hookResponse.result.response.data.values.temperatureApparent}</span>
                 </>
             }
         </div>

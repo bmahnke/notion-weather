@@ -8,14 +8,17 @@ interface HourlyForecastProps {
 }
 
 export function HourlyForecast(props: HourlyForecastProps) {
-    const [forecast, loading] = useForecast(props.googlePlace.place_id, "hourly");
+    const hookResponse = useForecast(props.googlePlace.place_id, "hourly");
 
     return (
         <div className="flex flex-col">
-            { loading &&
+            { hookResponse.loading &&
                 <span>LOADING</span>
             }
-            {!loading && forecast && forecast.response.timelines.hourly.slice(0, 12).map((hour, index) => {
+            { !hookResponse.loading && hookResponse.error &&
+                <span>ERROR: {hookResponse.errorMessage}</span>
+            }            
+            {!hookResponse.loading && hookResponse.result && hookResponse.result.response.timelines.hourly.slice(0, 12).map((hour, index) => {
                 return (
                     <div key={index} className="flex flex-row space-x-2">
                         <IconComponent className="w-8 h-8" icon={hour.values.weatherCodeInfo.icon} alt={hour.values.weatherCodeInfo.description} />  
