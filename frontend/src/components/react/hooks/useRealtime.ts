@@ -28,7 +28,7 @@ export function useRealtime(googlePlaceId: string) : HookResponse {
             })
             .catch((error : Error) => {
                 console.error("ERROR", error);
-                setError(false);
+                setError(true);
                 setMEssage(error.message)
             })
             .finally(() => {
