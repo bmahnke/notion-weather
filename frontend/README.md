@@ -4,6 +4,9 @@
 npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles//output.css --watch
 ```
 
+# Icons
+[Figma Icon Pack](https://www.figma.com/file/NakFlJvi2b5fjAkOCnvR51/Solar-Icons-Set-(Community)?type=design&node-id=302-5046&mode=design&t=zvmO8S09fXffBmFW-0)
+
 # Astro Starter Kit: Basics
 
 ```sh
@@ -58,3 +61,4 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
