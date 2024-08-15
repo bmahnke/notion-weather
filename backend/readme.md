@@ -38,8 +38,11 @@ https://docs.djangoproject.com/en/4.2/ref/contrib/gis/install/#macos
 ```sh
 $ brew install postgresql
 $ brew install postgis
+$ brew install geos
 $ brew install gdal
 $ brew install libgeoip
+$ brew install libassuan
+$ brew install poppler
 ```
 
 #### windows

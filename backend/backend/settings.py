@@ -25,10 +25,14 @@ if os.name == 'nt':
     os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
     os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 else:
-    os.environ['GEOS_LIBRARY_PATH'] = '/opt/homebrew/Cellar/geos/3.12.1/lib/libgeos_c.dylib'
-    GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.12.1/lib/libgeos_c.dylib'
-    os.environ['GDAL_LIBRARY_PATH'] = '/opt/homebrew/Cellar/gdal/3.8.3/lib/libgdal.dylib'
-    GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.8.3/lib/libgdal.dylib'
+    os.environ['GEOS_LIBRARY_PATH'] = '/opt/homebrew/Cellar/geos/3.12.2/lib/libgeos_c.dylib'
+    GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.12.2/lib/libgeos_c.dylib'
+    os.environ['GDAL_LIBRARY_PATH'] = '/opt/homebrew/Cellar/gdal/3.9.1_1/lib/libgdal.dylib'
+    GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.9.1_1/lib/libgdal.dylib'
+
+    # GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
+    # GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
+
 
 
 # Initialise environment variables
