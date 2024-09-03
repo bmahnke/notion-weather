@@ -17,12 +17,10 @@ function setWeatherCodeInfo(io: TomorrowIoForecast) : TomorrowIoForecast {
     if (io.response.timelines) {
         if (io.response.timelines.daily) {
             io.response.timelines.daily.forEach(v => {
-                console.debug("setting weather code information for day: ", v.time)
                 v.values.weatherCodeInfo = getWeatherCodeInformation(v.values.weatherCodeMin)
             });
         } else if (io.response.timelines.hourly) {
             io.response.timelines.hourly.forEach(v => {
-                console.debug("setting weather code information for day: ", v.time)
                 v.values.weatherCodeInfo = getWeatherCodeInformation(v.values.weatherCode)
             });        
         }        

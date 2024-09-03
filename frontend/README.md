@@ -4,6 +4,10 @@
 npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles//output.css --watch
 ```
 
+# Inspiration
+[MerrySky](https://merrysky.net/)
+[WeatherForMe](https://weatherfor.me/weather.html#30809)
+
 # Icons
 [Figma Icon Pack](https://www.figma.com/file/NakFlJvi2b5fjAkOCnvR51/Solar-Icons-Set-(Community)?type=design&node-id=302-5046&mode=design&t=zvmO8S09fXffBmFW-0)
 

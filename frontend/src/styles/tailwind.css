@@ -16,14 +16,16 @@ code {
 
 html {
     font-family: system-ui, sans-serif;
-    @apply bg-gray-100 text-gray-900;
+    @apply bg-gray-100 text-gray-900 placeholder:text-gray-400 dark:bg-slate-950 dark:text-gray-400;
 }
 
 body {
     margin: auto;
     padding: 1rem;
-    max-width: calc(100% - 2rem);
 
     @apply text-base;
 }
 
+[type='text'], input:where(:not([type])), [type='email'], [type='url'], [type='password'], [type='number'], [type='date'], [type='datetime-local'], [type='month'], [type='search'], [type='tel'], [type='time'], [type='week'], [multiple], textarea, select {
+    @apply dark:bg-slate-800
+}

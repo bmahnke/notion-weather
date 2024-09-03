@@ -85,7 +85,7 @@ export function SearchForm(props: SearchFormProps) {
 		<form id="weather-form" onSubmit={(e) => handleSubmit(e)} className="flex justify-between w-full" >
 			<div id="form-wrapper" className="grid grid-cols-2 gap-4">
 				<div>
-					<label htmlFor="search" className="block text-sm font-medium leading-6 text-gray-900">Search</label>
+					<label htmlFor="search" className="block text-sm font-medium leading-6">Search</label>
 					<div className="mt-2">
 						<input 
 							type="search"
@@ -93,7 +93,7 @@ export function SearchForm(props: SearchFormProps) {
 							value={query}
 							name="search"
 							onChange={(e) => setQuery(e.target.value)}
-							className="block w-full outline-none rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-orange-500 text-sm"
+							className="block w-full outline-none rounded-md border-0 px-2 py-1.5 shadow-sm focus:ring-orange-500 text-sm"
 							placeholder='Augusta, GA'
 						/>
 						{options.length > 1 && 
@@ -101,7 +101,7 @@ export function SearchForm(props: SearchFormProps) {
 							{
 								options.map((option: GooglePlace, index: number) => {
 									return (
-										<li className={index % 2 == 0 ? "cursor-pointer px-2 py-0.5 bg-gray-100 hover:bg-gray-200" : "cursor-pointer px-2 py-0.5 hover:bg-gray-200"}
+										<li className={`cursor-pointer px-2 py-0.5 hover:bg-slate-200 ${index %2 == 0 ? "dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-100" : "dark:bg-slate-700 dark:hover:bg-slate-600 "}`}
 											key={option.place_id} 
 											onClick={() => onSelect(option)}
 										>
