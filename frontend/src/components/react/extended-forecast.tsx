@@ -8,7 +8,7 @@ interface ExtendedForecastProps {
 }
 
 export function ExtendedForecast(props: ExtendedForecastProps) {
-    const hookResponse = useForecast(props.googlePlace.place_id, "daily");
+    const hookResponse = useForecast(props.googlePlace.place_id, "daily", true);
 
     return (
         <div className="flex flex-col">

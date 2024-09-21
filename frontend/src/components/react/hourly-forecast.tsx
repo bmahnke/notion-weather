@@ -8,7 +8,7 @@ interface HourlyForecastProps {
 }
 
 export function HourlyForecast(props: HourlyForecastProps) {
-    const hookResponse = useForecast(props.googlePlace.place_id, "hourly");
+    const hookResponse = useForecast(props.googlePlace.place_id, "hourly", true);
 
     return (
         <div className="flex flex-col">

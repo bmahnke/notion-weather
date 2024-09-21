@@ -1,5 +1,5 @@
 import SearchForm from "./search-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type GooglePlace } from "../../types/google_place";
 import { ExtendedForecast } from "./extended-forecast";
 import { HourlyForecast } from "./hourly-forecast";
@@ -11,7 +11,18 @@ export function WeatherApp() {
     function handlePlaceSelect(option: GooglePlace | undefined) {
         setGooglePlace(option)
     }
-    
+
+    if (true) {
+        useEffect(() => {
+            const googlePlaceOpt = {
+                place_id: "ChIJZRJWylm-locRud7VH5uFOmM",
+                description: "Lincoln, NE"
+            } as GooglePlace
+        
+            setGooglePlace(googlePlaceOpt)
+        }, [])
+    }
+
     return (
         <div>
             <SearchForm 
